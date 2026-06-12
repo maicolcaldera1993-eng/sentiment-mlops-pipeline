@@ -1,0 +1,53 @@
+# Workflow di Continuous Integration
+
+name: CI
+
+# TRIGGER: quali eventi fanno scattare il workflow.
+on:
+  push:
+    branches: [main]        # ogni push sul branch main...
+  pull_request:
+    branches: [main]        # ...e ogni pull request diretta verso main
+
+jobs:
+  test:                     # nome del job "test"
+    runs-on: ubuntu-latest  
+
+    steps:
+      # 1) scarica la repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2) Installa Python 3.12 (stessa versione usata nel Codespace).
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 3) CACHE dei pacchetti pip: La chiave include l'hash di
+      #    requirements.txt: se il file cambia, la cache si invalida.
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ hashFiles('requirements.txt') }}
+
+      # 4) CACHE del modello Hugging Face (~500 MB): senza, ogni
+      #    esecuzione lo riscaricherebbe da zero.
+      - name: Cache Hugging Face model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-cardiffnlp-sentiment-latest
+
+      # 5) Installa Torch in versione CPU-only: 
+      - name: Install CPU-only torch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      # 6) Installa tutte le altre dipendenze da requirements.txt:
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 7) Avvia i test. 
+      - name: Run tests
+        run: python -m pytest -v
