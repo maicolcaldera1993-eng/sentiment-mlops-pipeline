@@ -3,3 +3,4 @@ torch
 pytest
 fastapi
 uvicorn
+httpx
