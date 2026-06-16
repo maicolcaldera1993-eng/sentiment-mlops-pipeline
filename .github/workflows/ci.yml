@@ -52,10 +52,37 @@ jobs:
       - name: Run tests
         run: python -m pytest -v
 
-  # CD: se (e solo se) i test sono verdi, pubblica su HF Spaces.
+  # Test di accuratezza su tweet_eval.
+
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache Hugging Face assets
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-eval-cache
+
+      - name: Install CPU-only torch
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Evaluate model on tweet_eval
+        run: python evaluate.py
   
+  #CD: se (e solo se) i test sono verdi, pubblica su HF Spaces.
   deploy:
-    needs: test              # parte SOLO se il job test e' riuscito
+    needs: [test, evaluate]  # parte SOLO se il job test e la valutazione delel performance di accuratezza sono riusciti
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
