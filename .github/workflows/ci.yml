@@ -51,3 +51,21 @@ jobs:
       # 7) Avvia i test. 
       - name: Run tests
         run: python -m pytest -v
+
+  # CD: se (e solo se) i test sono verdi, pubblica su HF Spaces.
+  
+  deploy:
+    needs: test              # parte SOLO se il job test e' riuscito
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     #push di tutta la storia della repository
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}  
+        run: |
+          git push --force https://maicol931:$HF_TOKEN@huggingface.co/spaces/maicol931/sentiment-mlops-api main:main
