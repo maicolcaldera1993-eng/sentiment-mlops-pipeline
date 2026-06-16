@@ -1,0 +1,22 @@
+# Monitoraggio locale: solo Grafana in container.
+# L'app FastAPI gira separatamente con uvicorn 
+# Grafana interroga l'app tramite il plugin Infinity.
+# Avvio:  docker compose up
+# Stop:   docker compose down
+
+services:
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage: {}
