@@ -1,6 +1,7 @@
-# Monitoraggio locale: solo Grafana in container.
-# L'app FastAPI gira separatamente con uvicorn 
+# Monitoraggio locale: Grafana in container.
+# L'app FastAPI gira separatamente con uvicorn sulla porta 8000.
 # Grafana interroga l'app tramite il plugin Infinity.
+# Fonte dati e dashboard sono caricate automaticamente dal provisioning.
 # Avvio:  docker compose up
 # Stop:   docker compose down
 
@@ -17,6 +18,8 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./provisioning:/etc/grafana/provisioning
+      - ./dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
 
 volumes:
   grafana-storage: {}

@@ -4,7 +4,7 @@
   "metadata": {
     "name": "adkf97z",
     "namespace": "default",
-    "uid": "fc68bb93-87f3-4155-967f-6716d43e3b10",
+    "uid": "infinity-sentiment",
     "resourceVersion": "1781621729231000",
     "generation": 4,
     "creationTimestamp": "2026-06-16T14:46:38Z",
@@ -64,7 +64,7 @@
                       "group": "yesoreyeram-infinity-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": "afpbak3sahog0e"
+                        "name": "infinity-sentiment"
                       },
                       "spec": {
                         "columns": [],
@@ -223,7 +223,7 @@
                       "group": "yesoreyeram-infinity-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": "afpbak3sahog0e"
+                        "name": "infinity-sentiment"
                       },
                       "spec": {
                         "columns": [],
@@ -312,7 +312,7 @@
                       "group": "yesoreyeram-infinity-datasource",
                       "version": "v0",
                       "datasource": {
-                        "name": "afpbak3sahog0e"
+                        "name": "infinity-sentiment"
                       },
                       "spec": {
                         "columns": [],
